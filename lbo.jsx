@@ -1,48 +1,50 @@
-
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CloseIcon, DownloadIcon, FullScreenIcon, PrevIcon, NextIcon } from './lbo_icons';
 import { LBOoverlay, LBObottomNav, LBObutton, LBOimg, LBOtopNav, LBOtxt, LBOuserNav } from './lbo_elements';
 
-const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
+// Lightbox Overlay component
+const LBO = ({ initialIndex, LBOgallery, onClose, isvisible }) => {
 
-    // Current image index (default is the first image in the gallery)
+    // Set the initial index of the current image
     const [currentIndex, setCurrentIndex] = useState(initialIndex !== -1 ? initialIndex : 0);
+    const [download, setDownload] = useState(false);
+    const [key, setKey] = useState(Math.random());
+    const [slidedirection, setslidedirection] = useState('');
 
-    // Get the current image and its index
     const currentImage = LBOgallery[currentIndex];
 
-    // Set current image attributes
-    currentImage.title = currentImage.getAttribute('data-title');
-
-    // Download button visibility
-    const [download, setDownload] = useState(false);
-
-    // Slide direction
-    const [slideDirection, setSlideDirection] = useState('');
-
-    // Update download state when currentIndex changes
     useEffect(() => {
-        setDownload(currentImage.getAttribute('data-download') !== null);
-    }, [currentImage]);
+        if (!Array.isArray(LBOgallery)) {
+            console.error('LBOgallery must be an array');
+            return;
+        }
 
-    // Key for re-rendering the image
-    const [key, setKey] = useState(Math.random());
+        if (!currentImage) {
+            console.error('currentIndex is out of bounds');
+            return;
+        }
 
-    // Previous image in gallery
+        // Set the title of the current image
+        currentImage.title = currentImage.dataset.title;
+
+        setDownload(currentImage.dataset.download !== undefined);
+    }, [LBOgallery, currentImage]);
+
+    // Previous image in the gallery
     const handlePrev = useCallback(() => {
         if (LBOgallery.length > 1) {
-            setSlideDirection("left");
+            setslidedirection("left");
             setCurrentIndex(prevIndex => (prevIndex - 1 + LBOgallery.length) % LBOgallery.length);
-            setKey(Math.random()); // Forces re-render
+            setKey(Math.random());
         }
     }, [LBOgallery.length]);
 
-    // Next image in gallery
+    // Next image in the gallery
     const handleNext = useCallback(() => {
         if (LBOgallery.length > 1) {
-            setSlideDirection("right");
+            setslidedirection("right");
             setCurrentIndex(prevIndex => (prevIndex + 1) % LBOgallery.length);
-            setKey(Math.random()); // Forces re-render
+            setKey(Math.random());
         }
     }, [LBOgallery.length]);
 
@@ -63,7 +65,7 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [handleNext, handlePrev, onClose]);
 
-    // Touch swipe navigation
+    // Touch navigation
     useEffect(() => {
         let xLeft = 0;
         let xRight = 0;
@@ -98,17 +100,16 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
         };
     }, [handleNext, handlePrev, onClose]);
 
-    // Download image
+    // Download the current image (if download attribute is present)
     const handleDownload = () => {
         const a = document.createElement('a');
-        const title = currentImage.title || 'image'; // Default title if not set
-        a.download = `${title.replace(/ /g, '_').toLowerCase()}.jpg`; // Sets download filename
+        const title = currentImage.title || 'image';
+        a.download = `${title.replace(/ /g, '_').toLowerCase()}.jpg`; // Set the download filename
         a.href = currentImage.src;
-        a.download = '';
         a.click();
     };
 
-    // Fullscreen
+    // Fullscreen mode
     const handleFullscreen = () => {
         if (document.fullscreenElement) {
             document.exitFullscreen();
@@ -117,9 +118,8 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
         }
     };
 
-    // Lightbox overlay
     return (
-        <LBOoverlay isVisible={isVisible}>
+        <LBOoverlay $isvisible={isvisible}>
             <LBOtopNav>
                 <LBOtxt>{currentImage.title}</LBOtxt>
                 <LBOuserNav>
@@ -131,12 +131,11 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
 
             <LBOimg 
                 key={key} 
-                slideDirection={slideDirection} 
+                $slidedirection={slidedirection} 
                 src={currentImage.src} 
                 alt={currentImage.alt}  
             />
 
-            {/* Bottom navigation (shown only if more than 1 image in gallery) */}
             {LBOgallery.length > 1 && (
                 <LBObottomNav>
                     <LBObutton onClick={handlePrev} title="Previous image in gallery"><PrevIcon /></LBObutton>
@@ -146,8 +145,6 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isVisible }) => {
             )}
         </LBOoverlay>
     );
-
-}
+};
 
 export default LBO;
-module.exports = LBO;

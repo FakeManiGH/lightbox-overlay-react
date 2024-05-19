@@ -1,6 +1,5 @@
 import styled , { css, keyframes } from 'styled-components';
 
-
 // LightBox Overlay
 export const LBOoverlay = styled.div`
     display: flex;
@@ -16,7 +15,7 @@ export const LBOoverlay = styled.div`
     z-index: 9997;
     overflow: hidden;
     backdrop-filter: blur(5px);
-    animation: ${props => props.isVisible ? css`${fadeIn} 0.5s ease forwards` : css`${fadeOut} 0.5s ease forwards`};
+    animation: ${props => props.$isvisible ? css`${fadeIn} 0.5s ease forwards` : css`${fadeOut} 0.5s ease forwards`};
 `;
 
 // Image
@@ -35,9 +34,9 @@ export const LBOimg = styled.img`
     border-radius: 10px;
     z-index: 9998;
     animation: ${props => {
-        if (props.slideDirection === "left") {
+        if (props.$slidedirection === "left") {
             return css`${slideLeft} 0.4s ease`;
-        } else if (props.slideDirection === "right") {
+        } else if (props.$slidedirection === "right") {
             return css`${slideRight} 0.4s ease`;
         } else {
             return 'none';
@@ -58,7 +57,7 @@ export const LBOtopNav = styled.div`
     flex-wrap: nowrap;
     padding: 12px 15px;
     gap: 10px;
-    background: #11111175;
+    background: #11111195;
     transition: background 0.3s;
 
     &:hover {
@@ -79,7 +78,7 @@ export const LBObottomNav = styled.div`
     flex-wrap: nowrap;
     padding: 12px 15px;
     gap: 10px;
-    background: #11111175;
+    background: #11111195;
     transition: background 0.3s;
 
     &:hover {

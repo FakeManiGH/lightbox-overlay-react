@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import LBO from './lbo';
 
-export const LBOimage = ({ src, alt, gallery = '', title, download }) => {
+// LBOimage component
+const LBOimage = ({ src, alt, gallery, title, download }) => {
+
     const [isOpen, setIsOpen] = useState(false);  // Lightbox open/close state
     const [initialIndex, setInitialIndex] = useState(0);  // Initial index of the image in the gallery
 
-    // Gets all images in the gallery with same data-lbo value
-    const LBOgallery = Array.from(document.querySelectorAll(`img[data-lbo="${gallery}"]`));
+    let LBOgallery = Array.from(document.querySelectorAll(`img[data-lbo="${gallery}"]`));
+
+    if (LBOgallery.length === 0) {
+        LBOgallery = [document.querySelector(`img[src="${src}"]`)];
+    }
 
     // Fading animation, on opening and closing the lightbox [state]
-    const [isVisible, setIsVisible] = useState(true);
+    const [isvisible, setisvisible] = useState(true);
 
     // Handles opening the lightbox
     const handleOpen = () => {
         const initialIndex = LBOgallery.indexOf(document.querySelector(`img[src="${src}"]`));
         setInitialIndex(initialIndex);
         setIsOpen(true);
-        setIsVisible(true);
+        setisvisible(true);
         document.body.style.overflow = 'hidden';
     };
 
     // Handles closing the lightbox
     const handleClose = () => {
-        setIsVisible(false);
+        setisvisible(false);
         if (document.fullscreenElement) {
             document.exitFullscreen(); // Exit fullscreen mode if it's active
         }
@@ -49,7 +54,7 @@ export const LBOimage = ({ src, alt, gallery = '', title, download }) => {
         initialIndex={initialIndex}
         LBOgallery={LBOgallery}
         onClose={handleClose}
-        isVisible={isVisible}
+        isvisible={isvisible}
       />
       )}
     </>
@@ -57,4 +62,3 @@ export const LBOimage = ({ src, alt, gallery = '', title, download }) => {
 };
 
 export default LBOimage;
-module.exports = LBOimage;
