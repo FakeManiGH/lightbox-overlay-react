@@ -14,7 +14,7 @@ LBOreact is a modern and simple lightbox for react projects. It uses styled-comp
 ## Overview
 
 - **Build for React:** LBOreact works on React 18. It has not been tested with older versions. If you're not using react in your project, for non-React projects, use[LBOgeneral](https://github.com/FakeManiGH/lightbox-overlay-general).
-    - **Usability:** React, Vite, TypeScript.
+    - **Support:** React, Vite, TypeScript.
 - **Styled Components:** LBOreact uses styled-components v6.1.11. Its included as peerDependency and is installed.
 - **Responsive:** LBO works on all display sizes from desktop to mobile devices.
 - **Functionality:** Images browsed inside LBO can be downloaded if downloading for image is allocated. LBO has build in fullscreen mode to browse images in fullscreen.
@@ -28,7 +28,9 @@ LBOreact is a modern and simple lightbox for react projects. It uses styled-comp
 
 To install LBOreact to your React project, type in or copy following snippet to your console:
 
-    npm install lightbox-overlay-react
+```
+npm install lightbox-overlay-react
+```
 
 
 ### Manual Installation
@@ -42,22 +44,24 @@ To install LBOreact to your React project, type in or copy following snippet to 
 
 #### Basic LBO gallery setup:
 
-    import { LBOimage } from 'lightbox-overlay-react';
+```JSX
+import { LBOimage } from 'lightbox-overlay-react';
 
-    function App() {
-    return (
-      <>
-        <h4>LBO Gallery</h4>
-        <div>
-          <LBOimage src="path/of/image1" gallery="gallery1" title="img-title1" />
-          <LBOimage src="path/of/image2" gallery="gallery1" title="img-title2" />
-          <LBOimage src="path/of/image3" gallery="gallery1" title="img-title3" />
-          <LBOimage src="path/of/image4" gallery="gallery1" title="img-title4" />
-        </div>
-      </>
-    )}
+function App() {
+return (
+  <>
+    <h4>LBO Gallery</h4>
+    <div>
+      <LBOimage src="path/of/image1" gallery="gallery1" title="img-title1" />
+      <LBOimage src="path/of/image2" gallery="gallery1" title="img-title2" />
+      <LBOimage src="path/of/image3" gallery="gallery1" title="img-title3" />
+      <LBOimage src="path/of/image4" gallery="gallery1" title="img-title4" />
+    </div>
+  </>
+)}
 
-    export default App;
+export default App;
+```
 
  >Example above creates an App with gallery of 4 images, which are shown on page (add css to modify size). Images can be clicked and browsed inside lightbox as in preview image on top of the page.
  >>Example lacks **alt** attribute for image description, and by adding **download** attribute on LBOimage allocates download for set image inside the LBO.
