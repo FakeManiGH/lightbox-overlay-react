@@ -1,34 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CloseIcon, DownloadIcon, FullScreenIcon, PrevIcon, NextIcon } from './lbo_icons';
-import { LBOoverlay, LBObottomNav, LBObutton, LBOimg, LBOtopNav, LBOtxt, LBOuserNav } from './lbo_elements';
+import { LBOoverlay, LBObottomNav, LBObutton, LBOimg, LBOtopNav, LBOtxt, LBOuserNav } from './lbo_elements';    
 
 // Lightbox Overlay component
 const LBO = ({ initialIndex, LBOgallery, onClose, isvisible }) => {
 
     // Set the initial index of the current image
-    const [currentIndex, setCurrentIndex] = useState(initialIndex !== -1 ? initialIndex : 0);
-    const [download, setDownload] = useState(false);
-    const [key, setKey] = useState(Math.random());
-    const [slidedirection, setslidedirection] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(initialIndex !== -1 ? initialIndex : 0); // Initial index of the current image
+    const [download, setDownload] = useState(false); // Set download to false by default
+    const [key, setKey] = useState(Math.random()); // Random key for the image component (to force re-rendering of the image component)
+    const [slidedirection, setslidedirection] = useState(''); // Slide direction for the image component
 
+    // Get the current image
     const currentImage = LBOgallery[currentIndex];
 
+    // Get title from the current image
+    const title = currentImage.dataset.title || 'Image';
+
+    // Get download attribute from the current image
     useEffect(() => {
-        if (!Array.isArray(LBOgallery)) {
-            console.error('LBOgallery must be an array');
-            return;
-        }
-
-        if (!currentImage) {
-            console.error('currentIndex is out of bounds');
-            return;
-        }
-
-        // Set the title of the current image
-        currentImage.title = currentImage.dataset.title;
-
         setDownload(currentImage.dataset.download !== undefined);
-    }, [LBOgallery, currentImage]);
+    }, [currentImage]);
 
     // Previous image in the gallery
     const handlePrev = useCallback(() => {
@@ -121,7 +113,7 @@ const LBO = ({ initialIndex, LBOgallery, onClose, isvisible }) => {
     return (
         <LBOoverlay $isvisible={isvisible}>
             <LBOtopNav>
-                <LBOtxt>{currentImage.title}</LBOtxt>
+                <LBOtxt>{title}</LBOtxt>
                 <LBOuserNav>
                     <LBObutton onClick={handleFullscreen} title="Fullscreen"><FullScreenIcon /></LBObutton>
                     {download && <LBObutton title="Download this image" onClick={handleDownload}><DownloadIcon /></LBObutton>}

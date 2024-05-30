@@ -4,25 +4,23 @@ import LBO from './lbo';
 // LBOimage component
 const LBOimage = ({ src, alt, gallery, title, download }) => {
 
-    const [isOpen, setIsOpen] = useState(false);  // Lightbox open/close state
-    const [initialIndex, setInitialIndex] = useState(0);  // Initial index of the image in the gallery
-
-    let LBOgallery = Array.from(document.querySelectorAll(`img[data-lbo="${gallery}"]`));
-
-    if (LBOgallery.length === 0) {
-        LBOgallery = [document.querySelector(`img[src="${src}"]`)];
-    }
-
-    // Fading animation, on opening and closing the lightbox [state]
-    const [isvisible, setisvisible] = useState(true);
+    const [isOpen, setIsOpen] = useState(false); // Lightbox open state
+    const [initialIndex, setInitialIndex] = useState(0); // Initial index of the lightbox
+    const [LBOgallery, setLBOgallery] = useState([]); // Inilizes the gallery
+    const [isvisible, setisvisible] = useState(true); // Visibility of the lightbox (for animations)
 
     // Handles opening the lightbox
     const handleOpen = () => {
-        const initialIndex = LBOgallery.indexOf(document.querySelector(`img[src="${src}"]`));
-        setInitialIndex(initialIndex);
-        setIsOpen(true);
-        setisvisible(true);
-        document.body.style.overflow = 'hidden';
+      let LBOgallery = Array.from(document.querySelectorAll(`img[data-lbo="${gallery}"]`));
+      if (LBOgallery.length === 0) {
+        LBOgallery = [document.querySelector(`img[src="${src}"]`)];
+      }
+      const initialIndex = LBOgallery.findIndex(img => img.getAttribute('src') === src);
+      setLBOgallery(LBOgallery);
+      setInitialIndex(initialIndex);
+      setIsOpen(true);
+      setisvisible(true);
+      document.body.style.overflow = 'hidden';
     };
 
     // Handles closing the lightbox
